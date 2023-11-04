@@ -1,0 +1,35 @@
+plugins {
+    id("java")
+    id("checkstyle")
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+checkstyle {
+    configFile = file("checkstyle.xml")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+// Configure Checkstyle to run after compilation but not fail the build
+tasks.withType(Checkstyle) {
+    ignoreFailures = true
+}
+
+// Make the 'check' task depend on 'checkstyle' but continue
+// even if there are Checkstyle violations
+check.dependsOn checkstyle
+
+
